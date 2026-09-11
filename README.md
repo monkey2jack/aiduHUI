@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="packages/client/public/assets/aiduhui-banner.svg" alt="aiduHUI v0.1" width="100%">
+  <img src="packages/client/public/assets/aiduhui-banner.png" alt="aiduHUI v0.1" width="100%">
 </p>
 
 # aiduHUI⚕爱嘟心视界——HERMES AGENT 专精智控台
