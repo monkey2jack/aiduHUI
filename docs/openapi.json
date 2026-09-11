@@ -884,8 +884,7 @@
                   }
                 },
                 "required": [
-                  "password",
-                  "username"
+                  "password"
                 ]
               }
             }

@@ -77,7 +77,7 @@ describe('LoginView password login', () => {
     expect(mockReplace).not.toHaveBeenCalledWith('/workbench')
   })
 
-  it('logs in with username and password', async () => {
+  it('logs in with password', async () => {
     const theme = {
       fontSize: 16,
       textColor: '#202020',
@@ -88,12 +88,11 @@ describe('LoginView password login', () => {
     mockLoginWithPassword.mockResolvedValue({ token: 'jwt-token', userId: 7, theme })
     const wrapper = mount(LoginView)
 
-    const inputs = wrapper.findAll('input.login-input')
-    await inputs[0].setValue('admin')
-    await inputs[1].setValue('123456')
-    await wrapper.find('form.login-form').trigger('submit')
+    const input = wrapper.find('input.ui-input')
+    await input.setValue('123456')
+    await wrapper.find('form.ui-field').trigger('submit')
 
-    expect(mockLoginWithPassword).toHaveBeenCalledWith('admin', '123456')
+    expect(mockLoginWithPassword).toHaveBeenCalledWith('', '123456')
     expect(mockSetApiKey).toHaveBeenCalledWith('jwt-token')
     expect(mockActivateUserTheme).toHaveBeenCalledWith(7, theme)
     expect(mockReplace).toHaveBeenCalledWith('/workbench')
@@ -105,28 +104,20 @@ describe('LoginView password login', () => {
     mockLoginWithPassword.mockResolvedValue({ token: 'jwt-token', userId: 7, theme: null })
     const wrapper = mount(LoginView)
 
-    const inputs = wrapper.findAll('input.login-input')
-    await inputs[0].setValue('admin')
-    await inputs[1].setValue('123456')
-    await wrapper.find('form.login-form').trigger('submit')
+    const input = wrapper.find('input.ui-input')
+    await input.setValue('123456')
+    await wrapper.find('form.ui-field').trigger('submit')
 
     expect(mockReplace).toHaveBeenCalledWith(redirect)
-  })
-
-  it('shows the default login hint', () => {
-    const wrapper = mount(LoginView)
-
-    expect(wrapper.text()).toContain('login.defaultCredentialsHint')
   })
 
   it('shows an error when password login fails', async () => {
     mockLoginWithPassword.mockRejectedValue(new Error('Invalid username or password'))
     const wrapper = mount(LoginView)
 
-    const inputs = wrapper.findAll('input.login-input')
-    await inputs[0].setValue('admin')
-    await inputs[1].setValue('bad-password')
-    await wrapper.find('form.login-form').trigger('submit')
+    const input = wrapper.find('input.ui-input')
+    await input.setValue('bad-password')
+    await wrapper.find('form.ui-field').trigger('submit')
 
     expect(wrapper.find('.login-error').text()).toBe('Invalid username or password')
     expect(mockSetApiKey).not.toHaveBeenCalled()
@@ -139,14 +130,12 @@ describe('LoginView password login', () => {
     mockLoginWithPassword.mockRejectedValue(err)
     const wrapper = mount(LoginView)
 
-    const inputs = wrapper.findAll('input.login-input')
-    await inputs[0].setValue('admin')
-    await inputs[1].setValue('123456')
-    await wrapper.find('form.login-form').trigger('submit')
+    const input = wrapper.find('input.ui-input')
+    await input.setValue('123456')
+    await wrapper.find('form.ui-field').trigger('submit')
 
     expect(wrapper.find('.login-error').text()).toBe('login.tooManyAttempts')
     expect(wrapper.find('.login-lock-hint').text()).toContain('login.lockResetHint')
-    expect(wrapper.find('.login-lock-hint').text()).toContain('login.defaultLoginResetHint')
     const commands = wrapper.findAll('.login-lock-hint code').map(command => command.text())
     expect(commands).toEqual([
       'hermes-web-ui clear-login-locks --restart',
@@ -161,10 +150,9 @@ describe('LoginView password login', () => {
     mockLoginWithPassword.mockRejectedValue(err)
     const wrapper = mount(LoginView)
 
-    const inputs = wrapper.findAll('input.login-input')
-    await inputs[0].setValue('admin')
-    await inputs[1].setValue('123456')
-    await wrapper.find('form.login-form').trigger('submit')
+    const input = wrapper.find('input.ui-input')
+    await input.setValue('123456')
+    await wrapper.find('form.ui-field').trigger('submit')
 
     expect(wrapper.find('.login-error').text()).toBe('login.tooManyAttempts')
     expect(wrapper.find('.login-lock-hint').text()).toContain('login.desktopLockResetHint')

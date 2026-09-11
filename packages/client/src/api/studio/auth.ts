@@ -19,10 +19,14 @@ export interface LoginResponse {
 }
 
 export async function loginWithPassword(username: string, password: string): Promise<LoginResponse> {
+  const payload: Record<string, string> = { password }
+  if (username && username.trim()) {
+    payload.username = username.trim()
+  }
   const res = await fetch('/api/auth/login', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify(payload),
   })
   if (!res.ok) {
     const data = await res.json().catch(() => ({}))

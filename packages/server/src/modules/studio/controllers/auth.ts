@@ -178,11 +178,25 @@ async function authenticatePasswordUser(
   }
 
   const existingUserCount = countUsers()
-  const user = existingUserCount === 0
-    ? bootstrapDefaultSuperAdmin(username, password)
-    : findUserByUsername(username)
+  let user: UserRecord | null = null
 
-  if (!user || user.status !== 'active' || (existingUserCount > 0 && !verifyPassword(password, user.password_hash))) {
+  if (existingUserCount === 0) {
+    user = bootstrapDefaultSuperAdmin(username || DEFAULT_USERNAME, password)
+  } else if (username) {
+    user = findUserByUsername(username)
+  } else {
+    // Single password login mode: test password against existing users (prefer first active super_admin)
+    const users = listUsers()
+    for (const u of users) {
+      const fullUser = findUserById(u.id)
+      if (fullUser && fullUser.status === 'active' && verifyPassword(password, fullUser.password_hash)) {
+        user = fullUser
+        break
+      }
+    }
+  }
+
+  if (!user || user.status !== 'active' || (existingUserCount > 0 && username && !verifyPassword(password, user.password_hash))) {
     recordPasswordFailure(ip)
     ctx.status = 401
     ctx.body = { error: 'Invalid username or password' }
@@ -222,13 +236,13 @@ function accessibleProfileNames(user: UserRecord): string[] {
  */
 export async function login(ctx: Context) {
   const { username, password } = ctx.request.body as { username?: string; password?: string }
-  if (!username || !password) {
+  if (!password) {
     ctx.status = 400
-    ctx.body = { error: 'Username and password are required' }
+    ctx.body = { error: 'Password is required' }
     return
   }
 
-  const result = await passwordLogin(ctx, username, password)
+  const result = await passwordLogin(ctx, username || '', password)
   if (!result.ok) return
   ctx.body = {
     token: result.token,
