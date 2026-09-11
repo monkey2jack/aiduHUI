@@ -471,33 +471,35 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
 .boundary-toggle-btn {
   position: absolute;
   top: 50%;
-  right: -13px;
+  right: -8px;
   transform: translateY(-50%);
-  z-index: 40;
-  width: 24px;
-  height: 48px;
+  z-index: 50;
+  width: 16px;
+  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 12px;
-  border: 1px solid rgba(82, 82, 82, 0.16);
-  background: rgba(255, 255, 255, 0.92);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 2px 10px rgba(31, 78, 121, 0.12);
-  color: $gray;
+  border-radius: 8px;
+  border: 1px solid rgba(82, 82, 82, 0.20);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  color: $gray-soft;
   cursor: pointer;
-  transition: all 0.2s $ease;
+  padding: 0;
+  transition: all 0.18s $ease;
 
   &:hover {
     color: $blue;
     border-color: $blue;
     background: #ffffff;
-    transform: translateY(-50%) scale(1.08);
+    box-shadow: 0 2px 8px rgba(31, 78, 121, 0.18);
   }
 
   svg {
-    width: 14px;
-    height: 14px;
+    width: 10px;
+    height: 10px;
   }
 }
 
@@ -755,57 +757,69 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   font-size: 28px;
 }
 
-/* 手机端响应式适配 (Mobile & Tablet) */
+/* 手机端响应式适配 (Mobile & Tablet) —— 保持侧栏折叠体验 */
 @media (max-width: 768px) {
   .shell {
-    padding: 0 12px;
+    padding: 0 8px;
   }
 
   .stage-inner {
-    flex-direction: column;
-    gap: 10px;
+    flex-direction: row;
+    gap: 8px;
   }
 
   .wb-sidebar {
-    width: 100% !important;
-    height: auto !important;
-    flex-direction: row;
-    align-items: center;
-    overflow-x: auto;
+    width: 156px !important;
+    &.is-collapsed {
+      width: 48px !important;
+    }
   }
 
   .boundary-toggle-btn {
-    display: none !important;
-  }
-
-  .sidebar-cards {
-    flex-direction: row;
-    width: 100%;
-    overflow-x: auto;
-    padding-bottom: 4px;
+    display: flex !important;
+    right: -7px;
+    width: 14px;
+    height: 28px;
+    border-radius: 6px;
   }
 
   .side-card {
-    flex: 0 0 auto;
-    padding: 8px 14px;
+    padding: 0 8px;
+    gap: 6px;
   }
 
-  .sidebar-foot {
-    padding-top: 0;
-    margin-inline-start: auto;
+  .side-card__icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .side-card__title {
+    font-size: 0.82rem;
+  }
+
+  .side-card__en {
+    display: none;
   }
 
   .logout-btn {
-    width: auto;
-    padding: 8px 12px;
+    padding: 6px 8px;
+  }
+
+  .logout-text {
+    font-size: 0.75rem;
   }
 
   .paper-card {
-    padding: 12px 14px;
+    padding: 10px 12px;
   }
 
   .wordmark {
-    font-size: 24px;
+    font-size: 20px;
+  }
+
+  .brand-logo {
+    width: 32px;
+    height: 32px;
   }
 
   .slogan-wrap {
