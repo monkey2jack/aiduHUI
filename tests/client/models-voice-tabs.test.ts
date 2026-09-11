@@ -116,21 +116,40 @@ describe('Models voice settings tabs', () => {
     routeState.query = {}
   })
 
-  it('opens STT/TTS from the route query and keeps tab changes linkable', async () => {
-    routeState.query = { tab: 'stt', profile: 'work' }
+  it('exposes only the three kept model tabs and keeps tab changes linkable', async () => {
+    routeState.query = { profile: 'work' }
     const wrapper = mount(ModelsView)
     await flushPromises()
 
     const tabs = wrapper.findComponent({ name: 'NTabs' })
-    expect(tabs.props('value')).toBe('stt')
-    expect(wrapper.find('[data-kind="stt"]').exists()).toBe(true)
-    expect(wrapper.find('[data-kind="tts"]').exists()).toBe(true)
+    // aiduHUI 0.1.0 scope: general / auxiliary / combination only.
+    expect(tabs.props('value')).toBe('general')
+    expect(wrapper.find('[data-tab="general"]').exists()).toBe(true)
+    expect(wrapper.find('[data-tab="auxiliary"]').exists()).toBe(true)
+    expect(wrapper.find('[data-tab="combination"]').exists()).toBe(true)
 
-    tabs.vm.$emit('update:value', 'tts')
+    tabs.vm.$emit('update:value', 'combination')
     await flushPromises()
     expect(routerReplace).toHaveBeenCalledWith({
-      query: { tab: 'tts', profile: 'work' },
+      query: { tab: 'combination', profile: 'work' },
     })
+  })
+
+  it('drops STT/TTS route queries instead of rendering removed voice tabs', async () => {
+    // Negative control for the removal above: a stale ?tab=stt / ?tab=tts link
+    // must fall back to general AND must not render the voice panels.
+    for (const tab of ['stt', 'tts']) {
+      routerReplace.mockClear()
+      routeState.query = { tab, profile: 'work' }
+      const wrapper = mount(ModelsView)
+      await flushPromises()
+
+      expect(wrapper.findComponent({ name: 'NTabs' }).props('value')).toBe('general')
+      expect(wrapper.find('[data-kind="stt"]').exists()).toBe(false)
+      expect(wrapper.find('[data-kind="tts"]').exists()).toBe(false)
+      expect(wrapper.find('[data-tab="stt"]').exists()).toBe(false)
+      expect(wrapper.find('[data-tab="tts"]').exists()).toBe(false)
+    }
   })
 
   it('keeps the add-provider deep link on the general tab', async () => {

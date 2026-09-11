@@ -254,7 +254,7 @@ $wb-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC',
   flex: 0 0 auto;
   width: 148px;
   padding: 14px 10px;
-  border-right: 1px solid $wb-line;
+  border-inline-end: 1px solid $wb-line;
   background: var(--bg-card);
   overflow-y: auto;
 }
@@ -270,7 +270,7 @@ $wb-font: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'PingFang SC',
   color: $wb-gray;
   font-family: inherit;
   font-size: 13.5px;
-  text-align: left;
+  text-align: start;
   cursor: pointer;
   transition: background 0.16s ease, color 0.16s ease, border-color 0.16s ease;
 }
