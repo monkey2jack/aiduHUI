@@ -24,6 +24,7 @@ import UsageView from '@/views/hermes/UsageView.vue'
 import LogsView from '@/views/hermes/LogsView.vue'
 import ProfilesView from '@/views/hermes/ProfilesView.vue'
 import CompressionSettings from '@/components/hermes/settings/CompressionSettings.vue'
+import { clearApiKey } from '@/api/client'
 import { mountLatticeBG, unmountLatticeBG } from '@/utils/lattice-bg'
 
 const { t } = useI18n()
@@ -130,6 +131,11 @@ let sloganTimer: ReturnType<typeof setInterval> | null = null
 
 const currentSlogan = computed(() => SLOGAN_PAIRS[sloganIndex.value])
 
+function handleLogout() {
+  clearApiKey()
+  void router.replace('/login')
+}
+
 function pickRandomPosition() {
   sloganLeftPercent.value = Math.round(25 + Math.random() * 50)
 }
@@ -201,21 +207,20 @@ onUnmounted(() => {
     <!-- Main Workspace Stage: 70% 宽度左右分栏布局 -->
     <main class="wb-stage">
       <div class="shell stage-inner">
-        <!-- 左侧 6 大卡片导航，高度自适应撑满，带收起折叠按钮 -->
+        <!-- 左侧 6 大卡片导航 + 优雅分界线折叠按钮 + 底部 Logout -->
         <aside class="wb-sidebar" :class="{ 'is-collapsed': sidebarCollapsed }">
-          <div class="sidebar-head">
-            <button
-              type="button"
-              class="collapse-btn"
-              :title="sidebarCollapsed ? '展开导航' : '收起导航'"
-              @click="sidebarCollapsed = !sidebarCollapsed"
-            >
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                <polyline v-if="!sidebarCollapsed" points="15 18 9 12 15 6" />
-                <polyline v-else points="9 18 15 12 9 6" />
-              </svg>
-            </button>
-          </div>
+          <!-- 分界线悬浮折叠圆钮 -->
+          <button
+            type="button"
+            class="boundary-toggle-btn"
+            :title="sidebarCollapsed ? '展开侧栏' : '收起侧栏'"
+            @click="sidebarCollapsed = !sidebarCollapsed"
+          >
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline v-if="!sidebarCollapsed" points="14 18 8 12 14 6" />
+              <polyline v-else points="10 18 16 12 10 6" />
+            </svg>
+          </button>
 
           <div class="sidebar-cards">
             <button
@@ -236,6 +241,23 @@ onUnmounted(() => {
                 <span class="side-card__title">{{ item.label }}</span>
                 <span class="side-card__en">{{ item.en }}</span>
               </div>
+            </button>
+          </div>
+
+          <!-- 左下角 Logout 按钮 -->
+          <div class="sidebar-foot">
+            <button
+              type="button"
+              class="logout-btn"
+              :title="t('login.logout') || '退出登录'"
+              @click="handleLogout"
+            >
+              <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                <polyline points="16 17 21 12 16 7" />
+                <line x1="21" y1="12" x2="9" y2="12" />
+              </svg>
+              <span v-if="!sidebarCollapsed" class="logout-text">{{ t('login.logout') || '退出登录' }}</span>
             </button>
           </div>
         </aside>
@@ -432,32 +454,36 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
 
 /* 左侧 6 卡片导航侧栏 */
 .wb-sidebar {
+  position: relative;
   display: flex;
   flex-direction: column;
-  width: 220px;
+  width: 210px;
   flex-shrink: 0;
   height: 100%;
   transition: width 0.24s $ease;
 
   &.is-collapsed {
-    width: 64px;
+    width: 62px;
   }
 }
 
-.sidebar-head {
+/* 分界线优雅收起展开胶囊圆钮 */
+.boundary-toggle-btn {
+  position: absolute;
+  top: 50%;
+  right: -13px;
+  transform: translateY(-50%);
+  z-index: 40;
+  width: 24px;
+  height: 48px;
   display: flex;
-  justify-content: flex-end;
-  padding: 0 0 8px 0;
-}
-
-.collapse-btn {
-  width: 28px;
-  height: 28px;
-  display: grid;
-  place-items: center;
-  border-radius: 6px;
-  border: 1px solid rgba(82, 82, 82, 0.14);
-  background: rgba(255, 255, 255, 0.7);
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(82, 82, 82, 0.16);
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 2px 10px rgba(31, 78, 121, 0.12);
   color: $gray;
   cursor: pointer;
   transition: all 0.2s $ease;
@@ -466,12 +492,57 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
     color: $blue;
     border-color: $blue;
     background: #ffffff;
+    transform: translateY(-50%) scale(1.08);
   }
 
   svg {
     width: 14px;
     height: 14px;
   }
+}
+
+/* 左下角 Logout 样式 */
+.sidebar-foot {
+  padding-top: 10px;
+  flex-shrink: 0;
+}
+
+.logout-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 14px;
+  border-radius: 8px;
+  border: 1px solid rgba(82, 82, 82, 0.14);
+  background: rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(6px);
+  color: $gray-soft;
+  cursor: pointer;
+  transition: all 0.2s $ease;
+
+  &:hover {
+    color: #c62828;
+    border-color: rgba(198, 40, 40, 0.35);
+    background: rgba(255, 255, 255, 0.88);
+  }
+}
+
+.is-collapsed .logout-btn {
+  padding: 9px 0;
+  justify-content: center;
+}
+
+.logout-icon {
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+}
+
+.logout-text {
+  font-size: 0.84rem;
+  font-weight: 600;
+  white-space: nowrap;
 }
 
 .sidebar-cards {
@@ -682,5 +753,63 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   font-style: normal;
   font-weight: 400;
   font-size: 28px;
+}
+
+/* 手机端响应式适配 (Mobile & Tablet) */
+@media (max-width: 768px) {
+  .shell {
+    padding: 0 12px;
+  }
+
+  .stage-inner {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .wb-sidebar {
+    width: 100% !important;
+    height: auto !important;
+    flex-direction: row;
+    align-items: center;
+    overflow-x: auto;
+  }
+
+  .boundary-toggle-btn {
+    display: none !important;
+  }
+
+  .sidebar-cards {
+    flex-direction: row;
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: 4px;
+  }
+
+  .side-card {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+  }
+
+  .sidebar-foot {
+    padding-top: 0;
+    margin-inline-start: auto;
+  }
+
+  .logout-btn {
+    width: auto;
+    padding: 8px 12px;
+  }
+
+  .paper-card {
+    padding: 12px 14px;
+  }
+
+  .wordmark {
+    font-size: 24px;
+  }
+
+  .slogan-wrap {
+    display: none;
+  }
 }
 </style>
