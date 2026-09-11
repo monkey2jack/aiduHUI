@@ -72,7 +72,10 @@ async function handlePasswordLogin() {
   <div class="login-view">
     <div class="login-card">
       <div class="login-logo">
-        <img src="/logo.png" alt="Ekko Studio" width="80" height="80" />
+        <picture>
+          <source srcset="/assets/img/monkey.webp" type="image/webp" />
+          <img src="/assets/img/monkey.png" alt="aiduHUI" width="80" height="80" draggable="false" />
+        </picture>
       </div>
       <h1 class="login-title">{{ t("login.title") }}</h1>
       <p class="login-desc">{{ t("login.description") }}</p>

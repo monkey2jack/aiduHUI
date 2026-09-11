@@ -9,6 +9,7 @@ export default defineConfig({
       '@': resolve(__dirname, 'packages/client/src'),
       electron: resolve(__dirname, 'tests/mocks/electron.ts'),
       '/logo.png': resolve(__dirname, 'packages/client/public/logo.png'),
+      '/assets': resolve(__dirname, 'packages/client/public/assets'),
     },
   },
   test: {
