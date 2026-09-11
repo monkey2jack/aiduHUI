@@ -4,12 +4,35 @@ import {
   type ThemeCustomization,
 } from './theme-customization'
 
+/**
+ * aiduHUI brand typography — Apple system stack everywhere.
+ *
+ * Mirrors the aiduPARK VI rule: SF Pro for Latin, PingFang SC for Chinese,
+ * with graceful off-Apple fallbacks. One Apple voice across the whole UI.
+ */
+export const BRAND_FONT =
+  '-apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif'
+export const BRAND_FONT_MONO =
+  'SF Mono, Menlo, Monaco, "PingFang SC", Consolas, "Liberation Mono", monospace'
+
+/** aiduHUI brand tricolour (inherited from aiduPARK, do not extend). */
+export const BRAND_BLUE = '#1f4e79'
+export const BRAND_BLUE_HOVER = '#2a6296'
+export const BRAND_BLUE_PRESSED = '#16395a'
+export const BRAND_GRAY = '#525252'
+export const BRAND_INK = '#000000'
+
+/** Dark-mode blue: same hue, lifted for contrast on dark surfaces. */
+export const BRAND_BLUE_DARK = '#6ba3d0'
+export const BRAND_BLUE_DARK_HOVER = '#8cbde3'
+export const BRAND_BLUE_DARK_PRESSED = '#4a86b8'
+
 export const lightThemeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#333333',
-    primaryColorHover: '#1a1a1a',
-    primaryColorPressed: '#000000',
-    primaryColorSuppl: '#333333',
+    primaryColor: BRAND_BLUE,
+    primaryColorHover: BRAND_BLUE_HOVER,
+    primaryColorPressed: BRAND_BLUE_PRESSED,
+    primaryColorSuppl: BRAND_BLUE,
     bodyColor: '#fafafa',
     cardColor: '#ffffff',
     modalColor: '#ffffff',
@@ -29,8 +52,8 @@ export const lightThemeOverrides: GlobalThemeOverrides = {
     fontSize: '14px',
     fontSizeMedium: '14px',
     heightMedium: '36px',
-    fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-    fontFamilyMono: 'JetBrains Mono, Fira Code, Consolas, monospace',
+    fontFamily: BRAND_FONT,
+    fontFamilyMono: BRAND_FONT_MONO,
   },
   Layout: {
     color: '#fafafa',
@@ -38,37 +61,37 @@ export const lightThemeOverrides: GlobalThemeOverrides = {
     headerColor: '#fafafa',
   },
   Menu: {
-    itemTextColorActive: '#1a1a1a',
-    itemTextColorActiveHover: '#1a1a1a',
-    itemTextColorChildActive: '#1a1a1a',
-    itemIconColorActive: '#1a1a1a',
-    itemIconColorActiveHover: '#000000',
-    itemColorActive: 'rgba(0, 0, 0, 0.06)',
-    itemColorActiveHover: 'rgba(0, 0, 0, 0.1)',
-    arrowColorActive: '#1a1a1a',
+    itemTextColorActive: BRAND_BLUE,
+    itemTextColorActiveHover: BRAND_BLUE_HOVER,
+    itemTextColorChildActive: BRAND_BLUE,
+    itemIconColorActive: BRAND_BLUE,
+    itemIconColorActiveHover: BRAND_BLUE_HOVER,
+    itemColorActive: 'rgba(31, 78, 121, 0.08)',
+    itemColorActiveHover: 'rgba(31, 78, 121, 0.12)',
+    arrowColorActive: BRAND_BLUE,
   },
   Button: {
     textColorPrimary: '#ffffff',
-    colorPrimary: '#333333',
-    colorHoverPrimary: '#1a1a1a',
-    colorPressedPrimary: '#000000',
+    colorPrimary: BRAND_BLUE,
+    colorHoverPrimary: BRAND_BLUE_HOVER,
+    colorPressedPrimary: BRAND_BLUE_PRESSED,
   },
   Input: {
     color: '#ffffff',
     colorFocus: '#ffffff',
     border: '1px solid #e0e0e0',
     borderHover: '1px solid #999999',
-    borderFocus: '1px solid #333333',
+    borderFocus: `1px solid ${BRAND_BLUE}`,
     borderDisabled: '1px solid #ebebeb',
     groupLabelBorder: '1px solid #e0e0e0',
     placeholderColor: '#999999',
-    caretColor: '#1a1a1a',
+    caretColor: BRAND_BLUE,
   },
   InternalSelection: {
     border: '1px solid #e0e0e0',
     borderHover: '1px solid #999999',
-    borderActive: '1px solid #333333',
-    borderFocus: '1px solid #333333',
+    borderActive: `1px solid ${BRAND_BLUE}`,
+    borderFocus: `1px solid ${BRAND_BLUE}`,
   },
   Card: {
     color: '#ffffff',
@@ -84,10 +107,10 @@ export const lightThemeOverrides: GlobalThemeOverrides = {
 
 export const darkThemeOverrides: GlobalThemeOverrides = {
   common: {
-    primaryColor: '#e0e0e0',
-    primaryColorHover: '#f5f5f5',
-    primaryColorPressed: '#ffffff',
-    primaryColorSuppl: '#e0e0e0',
+    primaryColor: BRAND_BLUE_DARK,
+    primaryColorHover: BRAND_BLUE_DARK_HOVER,
+    primaryColorPressed: BRAND_BLUE_DARK_PRESSED,
+    primaryColorSuppl: BRAND_BLUE_DARK,
     bodyColor: '#1a1a1a',
     cardColor: '#2a2a2a',
     modalColor: '#2a2a2a',
@@ -107,8 +130,8 @@ export const darkThemeOverrides: GlobalThemeOverrides = {
     fontSize: '14px',
     fontSizeMedium: '14px',
     heightMedium: '36px',
-    fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
-    fontFamilyMono: 'JetBrains Mono, Fira Code, Consolas, monospace',
+    fontFamily: BRAND_FONT,
+    fontFamilyMono: BRAND_FONT_MONO,
   },
   Layout: {
     color: '#1a1a1a',
@@ -116,37 +139,37 @@ export const darkThemeOverrides: GlobalThemeOverrides = {
     headerColor: '#1a1a1a',
   },
   Menu: {
-    itemTextColorActive: '#e0e0e0',
-    itemTextColorActiveHover: '#e0e0e0',
-    itemTextColorChildActive: '#e0e0e0',
-    itemIconColorActive: '#e0e0e0',
-    itemIconColorActiveHover: '#ffffff',
-    itemColorActive: 'rgba(255, 255, 255, 0.08)',
-    itemColorActiveHover: 'rgba(255, 255, 255, 0.12)',
-    arrowColorActive: '#e0e0e0',
+    itemTextColorActive: BRAND_BLUE_DARK,
+    itemTextColorActiveHover: BRAND_BLUE_DARK_HOVER,
+    itemTextColorChildActive: BRAND_BLUE_DARK,
+    itemIconColorActive: BRAND_BLUE_DARK,
+    itemIconColorActiveHover: BRAND_BLUE_DARK_HOVER,
+    itemColorActive: 'rgba(107, 163, 208, 0.12)',
+    itemColorActiveHover: 'rgba(107, 163, 208, 0.18)',
+    arrowColorActive: BRAND_BLUE_DARK,
   },
   Button: {
-    textColorPrimary: '#1a1a1a',
-    colorPrimary: '#e0e0e0',
-    colorHoverPrimary: '#f5f5f5',
-    colorPressedPrimary: '#ffffff',
+    textColorPrimary: '#ffffff',
+    colorPrimary: BRAND_BLUE,
+    colorHoverPrimary: BRAND_BLUE_HOVER,
+    colorPressedPrimary: BRAND_BLUE_PRESSED,
   },
   Input: {
     color: '#2a2a2a',
     colorFocus: '#2a2a2a',
     border: '1px solid #555555',
     borderHover: '1px solid #777777',
-    borderFocus: '1px solid #e0e0e0',
+    borderFocus: `1px solid ${BRAND_BLUE_DARK}`,
     borderDisabled: '1px solid #3a3a3a',
     groupLabelBorder: '1px solid #555555',
     placeholderColor: '#666666',
-    caretColor: '#e0e0e0',
+    caretColor: BRAND_BLUE_DARK,
   },
   InternalSelection: {
     border: '1px solid #555555',
     borderHover: '1px solid #777777',
-    borderActive: '1px solid #e0e0e0',
-    borderFocus: '1px solid #e0e0e0',
+    borderActive: `1px solid ${BRAND_BLUE_DARK}`,
+    borderFocus: `1px solid ${BRAND_BLUE_DARK}`,
   },
   Card: {
     color: '#2a2a2a',
@@ -160,8 +183,8 @@ export const darkThemeOverrides: GlobalThemeOverrides = {
   },
   Switch: {
     railColor: '#3a3a3a',
-    railColorActive: '#e0e0e0',
-    loadingColor: '#e0e0e0',
+    railColorActive: BRAND_BLUE_DARK,
+    loadingColor: BRAND_BLUE_DARK,
     opacityDisabled: 0.4,
   },
 }
@@ -173,7 +196,8 @@ export function getThemeOverrides(
 ): GlobalThemeOverrides {
   const base = isDark ? darkThemeOverrides : lightThemeOverrides
   if (!isComic && !customization) return base
-  const comicFont = "'Comic Neue', 'ZCOOL KuaiLe', 'Zen Maru Gothic', 'Gaegu', cursive, sans-serif"
+  // aiduHUI keeps the Apple voice even in comic mode — only the accent shifts.
+  const comicFont = BRAND_FONT
   const custom = customization ? resolveThemeCustomization(customization, isDark) : null
   const common = {
     ...base.common!,

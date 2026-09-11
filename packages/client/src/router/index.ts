@@ -31,6 +31,16 @@ const router = createRouter({
       meta: { standaloneChat: true },
     },
     {
+      // aiduHUI 0.1.0 — the single workbench page that carries every kept
+      // section (models / settings / jobs / channels / memory).
+      // `ownSidebar` suppresses the global AppSidebar: the workbench draws its
+      // own section rail, so the two must never render together.
+      path: '/workbench',
+      name: 'workbench',
+      component: () => import('@/views/WorkbenchView.vue'),
+      meta: { ownSidebar: true },
+    },
+    {
       path: '/hermes/chat',
       name: 'hermes.chat',
       component: () => import('@/views/hermes/ChatView.vue'),

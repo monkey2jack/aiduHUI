@@ -380,10 +380,10 @@ function handleUpdateClick() {
         <div class="version-links">
           <a
             class="sidebar-footer-link"
-            href="https://github.com/EKKOLearnAI/hermes-studio"
+            href="https://monkeyjack.feishu.cn/wiki/UTkUw4gQ8ihHQhkVZfYcNsYhnEe"
             target="_blank"
             rel="noopener noreferrer"
-            title="GitHub"
+            title="aiduHUI 文档"
           >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
               <path
@@ -393,10 +393,10 @@ function handleUpdateClick() {
           </a>
           <a
             class="sidebar-footer-link"
-            href="https://ekkostudio.xyz/"
+            href="https://aidupark.com"
             target="_blank"
             rel="noopener noreferrer"
-            title="Website"
+            title="aiduPARK 爱嘟乐园"
           >
             <svg
               width="14"

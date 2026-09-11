@@ -7,6 +7,13 @@
 :root {
   --font-size-base: 14px;
 
+  // aiduHUI brand typography — Apple system stack (same rule as aiduPARK).
+  // One Apple voice across the whole UI; --font-mono stays for code/terminal.
+  --font-brand: -apple-system, BlinkMacSystemFont, "SF Pro Text", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  --font-brand-mono: SF Mono, Menlo, Monaco, "PingFang SC", Consolas,
+    "Liberation Mono", monospace;
+
   // Backgrounds
   --bg-primary: #fafafa;
   --bg-primary-rgb: 250, 250, 250;
@@ -25,14 +32,14 @@
   --border-color: #e0e0e0;
   --border-light: #ebebeb;
 
-  // Accent
-  --accent-primary: #333333;
-  --accent-hover: #1a1a1a;
+  // Accent — aiduHUI brand blue (inherited from aiduPARK)
+  --accent-primary: #1f4e79;
+  --accent-hover: #2a6296;
   --accent-muted: #888888;
 
   // Text
   --text-primary: #1a1a1a;
-  --text-secondary: #666666;
+  --text-secondary: #525252;
   --text-muted: #999999;
   --input-placeholder-color: var(--text-muted);
   --input-border-color: rgba(var(--accent-primary-rgb), 0.18);
@@ -66,10 +73,10 @@
   --accent-info: #4a90d9;
 
   // RGB components (for rgba() usage)
-  --accent-primary-rgb: 51, 51, 51;
-  --accent-hover-rgb: 26, 26, 26;
+  --accent-primary-rgb: 31, 78, 121;
+  --accent-hover-rgb: 42, 98, 150;
   --text-primary-rgb: 26, 26, 26;
-  --text-secondary-rgb: 102, 102, 102;
+  --text-secondary-rgb: 82, 82, 82;
   --text-muted-rgb: 153, 153, 153;
   --success-rgb: 46, 125, 50;
   --error-rgb: 198, 40, 40;
@@ -96,9 +103,9 @@
   --border-color: #3a3a3a;
   --border-light: #333333;
 
-  // Accent
-  --accent-primary: #e0e0e0;
-  --accent-hover: #f5f5f5;
+  // Accent — brand blue lifted for dark surfaces (same hue, more contrast)
+  --accent-primary: #6ba3d0;
+  --accent-hover: #8cbde3;
   --accent-muted: #888888;
 
   // Text
@@ -133,8 +140,8 @@
   --accent-info: #6ba3d6;
 
   // RGB components
-  --accent-primary-rgb: 224, 224, 224;
-  --accent-hover-rgb: 245, 245, 245;
+  --accent-primary-rgb: 107, 163, 208;
+  --accent-hover-rgb: 140, 189, 227;
   --text-primary-rgb: 224, 224, 224;
   --text-secondary-rgb: 160, 160, 160;
   --text-muted-rgb: 136, 136, 136;
@@ -205,9 +212,10 @@ $msg-system-border: var(--msg-system-border);
 // Code
 $code-bg: var(--code-bg);
 
-// Typography
-$font-ui: var(--font-ui, 'Inter', system-ui, -apple-system, sans-serif);
-$font-code: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+// Typography — aiduHUI speaks one Apple voice; code keeps its own mono stack.
+// The comic theme's --font-ui is intentionally NOT consulted: brand VI wins.
+$font-ui: var(--font-brand);
+$font-code: var(--font-brand-mono);
 
 // Layout
 $sidebar-width: 240px;

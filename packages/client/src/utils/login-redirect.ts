@@ -1,4 +1,5 @@
-const DEFAULT_LOGIN_REDIRECT = '/hermes/chat'
+// aiduHUI lands on the workbench; chat stays reachable at /hermes/chat.
+const DEFAULT_LOGIN_REDIRECT = '/workbench'
 
 export function resolveLoginRedirect(value: unknown): string {
   const redirect = typeof value === 'string' ? value : ''
