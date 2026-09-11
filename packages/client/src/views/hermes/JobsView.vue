@@ -161,9 +161,27 @@ function arrowIcon(field: 'time' | 'name'): string {
 @use '@/styles/variables' as *;
 
 .jobs-view {
-  height: calc(100 * var(--vh));
+  height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.page-header {
+  border-bottom: none !important;
+  min-height: 0 !important;
+  padding: 0 0 10px 0 !important;
+}
+
+.header-title {
+  display: none !important;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 100%;
+  gap: 8px;
 }
 
 .jobs-split {

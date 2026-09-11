@@ -243,15 +243,25 @@ const displaySoul = computed(() => (data.value?.soul || '').replace(/§/g, '\n\n
 @use '@/styles/variables' as *;
 
 .memory-view {
-  height: calc(100 * var(--vh));
+  height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.page-header {
+  border-bottom: none !important;
+  min-height: 0 !important;
+  padding: 0 0 10px 0 !important;
+}
+
+.header-title {
+  display: none !important;
 }
 
 .memory-content {
   flex: 1;
   overflow: hidden;
-  padding: 20px;
+  padding: 0;
   display: flex;
   flex-direction: column;
 }

@@ -2,7 +2,7 @@
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { NButton, NTag, NSpin, useMessage, useDialog } from 'naive-ui'
-import type { HermesProfile, HermesProfileDetail } from '@/api/hermes/profiles'
+import { restartProfileGateway, type HermesProfile, type HermesProfileDetail } from '@/api/hermes/profiles'
 import { useProfilesStore } from '@/stores/hermes/profiles'
 import { useI18n } from 'vue-i18n'
 import ProfileAvatar from './ProfileAvatar.vue'
@@ -20,9 +20,22 @@ const expanded = ref(false)
 const detailLoading = ref(false)
 const exporting = ref(false)
 const switching = ref(false)
+const restartingGateway = ref(false)
 const detail = ref<HermesProfileDetail | null>(null)
 
 const isDefault = computed(() => props.profile.name === 'default')
+
+async function handleRestartGateway() {
+  restartingGateway.value = true
+  try {
+    await restartProfileGateway(props.profile.name)
+    message.success(t('profiles.runtime.gatewayRestarted', { name: props.profile.name }) || '网关已重启')
+  } catch (err: any) {
+    message.error(err?.message || t('profiles.runtime.gatewayRestartFailed') || '网关重启失败')
+  } finally {
+    restartingGateway.value = false
+  }
+}
 
 async function toggleDetail() {
   if (expanded.value) {
@@ -167,6 +180,15 @@ function handleEditConfig() {
     </div>
 
     <div class="card-actions">
+      <NButton
+        size="tiny"
+        quaternary
+        type="primary"
+        :loading="restartingGateway"
+        @click="handleRestartGateway"
+      >
+        {{ t('profiles.runtime.restartGateway') || '重启网关' }}
+      </NButton>
       <NButton size="tiny" quaternary @click="handleEditConfig">
         {{ t('profiles.editConfig') }}
       </NButton>

@@ -2,13 +2,13 @@
 /**
  * aiduHUI workbench — 爱嘟心视界
  *
- * 严格对齐 aiduMEI / aiduPARK 界面范式与布局规范：
- * 1. 屏幕宽度占比与 aiduPARK 保持一致：70% 宽幅 shell (--shell: 1240px)，Tabs、Stage、Header 宽度完全一致
- * 2. 顶部 Header (brandbar)：左侧版本号 (v0.1.0)，右侧 Powered by monkey² 与 GitHub 图标
- * 3. 顶部水平选项卡 (Nav Tabs)：自适应宽度居中，收纳 6 个主模块（含 PROFILES 配置档案）
- * 4. 底部 Footer：居中网站名（aiduHUI⚕爱嘟心视界），背景纯透明，同字号同基线
- * 5. 各部分卡片透明度降至 30%（0.30），显透底层 Canvas 三角晶格动态背景
- * 6. Slogan 动效：在整行空白区域内随机横向跳动浮现（I do·惟吾 / aidu·爱嘟 / AI do·智助）
+ * 彻底重构布局体系：
+ * 1. 左右分栏：6 个主选项卡垂直卡片位于左侧，高度自适应均分填满，右侧展示对应内容，保持 70% 宽幅 shell
+ * 2. 左侧栏具备收起/展开折叠切换按钮，收起时仅展示精简图标以最大化右侧区域
+ * 3. 右侧子选项卡 header (如通用/辅助/组合，上下文/性能/用量/日志) 严格吸顶固定，滚动内容不随之移动
+ * 4. 降低透明度（提高不透明度至 0.65~0.75），确保阅读清晰质感，底纹晶格隐约透出
+ * 5. 顶栏 brandbar 保留 v0.1.0、随机 Slogan 动效与 Powered by monkey²
+ * 6. 底栏 Footer 保持纯透明居中对齐
  */
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
@@ -31,6 +31,7 @@ const route = useRoute()
 const router = useRouter()
 
 const workbenchRef = ref<HTMLElement | null>(null)
+const sidebarCollapsed = ref(false)
 
 type SectionKey = 'models' | 'settings' | 'jobs' | 'channels' | 'memory' | 'profiles'
 type SettingsKey = 'compression' | 'performance' | 'usage' | 'logs'
@@ -124,13 +125,12 @@ const SLOGAN_PAIRS = [
 
 const sloganIndex = ref(0)
 const isSwitching = ref(false)
-const sloganLeftPercent = ref(50) // 随机在 25% ~ 75% 空白区域浮现
+const sloganLeftPercent = ref(50)
 let sloganTimer: ReturnType<typeof setInterval> | null = null
 
 const currentSlogan = computed(() => SLOGAN_PAIRS[sloganIndex.value])
 
 function pickRandomPosition() {
-  // 生成 25% 到 75% 之间的随机百分比位置
   sloganLeftPercent.value = Math.round(25 + Math.random() * 50)
 }
 
@@ -163,14 +163,14 @@ onUnmounted(() => {
 
 <template>
   <div ref="workbenchRef" class="workbench">
-    <!-- Top Header: 宽度严格对齐 70% 容器 -->
+    <!-- Top Header: 严格对齐 70% 容器 -->
     <header class="brandbar">
       <div class="shell brandbar-inner">
         <div class="foot-left">
           <span class="ver-text">v0.1.0</span>
         </div>
 
-        <!-- Slogan 在该行空白区域随机跳动浮现 -->
+        <!-- Slogan 在空白区域随机跳动浮现 -->
         <div
           class="slogan-wrap"
           :class="[{ 'is-switching': isSwitching }, `tier-${currentSlogan.tier}`]"
@@ -198,34 +198,50 @@ onUnmounted(() => {
       </div>
     </header>
 
-    <!-- Top Navigation Horizontal Tabs: 宽度严格对齐 70% 容器，自适应居中 -->
-    <nav class="wb-nav">
-      <div class="shell nav-shell">
-        <div class="tab-list" role="tablist" :aria-label="t('workbench.navLabel')">
-          <button
-            v-for="item in SECTION_TABS"
-            :key="item.key"
-            type="button"
-            class="nav-tab-item"
-            :class="{ 'is-active': section === item.key }"
-            role="tab"
-            :aria-selected="section === item.key"
-            @click="selectSection(item.key)"
-          >
-            <svg class="tab-item__icon" viewBox="0 0 24 24" aria-hidden="true">
-              <path :d="item.icon" />
-            </svg>
-            <span class="tab-item__label">{{ item.label }}</span>
-            <span class="tab-item__en">{{ item.en }}</span>
-          </button>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Stage Content Area: 宽度严格对齐 70% 容器，30% 透明度磨砂透出背景 -->
+    <!-- Main Workspace Stage: 70% 宽度左右分栏布局 -->
     <main class="wb-stage">
       <div class="shell stage-inner">
-        <div class="paper-card">
+        <!-- 左侧 6 大卡片导航，高度自适应撑满，带收起折叠按钮 -->
+        <aside class="wb-sidebar" :class="{ 'is-collapsed': sidebarCollapsed }">
+          <div class="sidebar-head">
+            <button
+              type="button"
+              class="collapse-btn"
+              :title="sidebarCollapsed ? '展开导航' : '收起导航'"
+              @click="sidebarCollapsed = !sidebarCollapsed"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline v-if="!sidebarCollapsed" points="15 18 9 12 15 6" />
+                <polyline v-else points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+          </div>
+
+          <div class="sidebar-cards">
+            <button
+              v-for="item in SECTION_TABS"
+              :key="item.key"
+              type="button"
+              class="side-card"
+              :class="{ 'is-active': section === item.key }"
+              :title="item.label"
+              @click="selectSection(item.key)"
+            >
+              <div class="side-card__icon-wrap">
+                <svg class="side-card__icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path :d="item.icon" />
+                </svg>
+              </div>
+              <div v-if="!sidebarCollapsed" class="side-card__meta">
+                <span class="side-card__title">{{ item.label }}</span>
+                <span class="side-card__en">{{ item.en }}</span>
+              </div>
+            </button>
+          </div>
+        </aside>
+
+        <!-- 右侧内容展示面板：适度透明度 (0.72)，子 header 绝对吸顶固定 -->
+        <section class="paper-card">
           <ModelsView v-if="section === 'models'" />
 
           <div v-else-if="section === 'settings'" class="wb-settings">
@@ -255,7 +271,7 @@ onUnmounted(() => {
           <ChannelsView v-else-if="section === 'channels'" />
           <MemoryView v-else-if="section === 'memory'" />
           <ProfilesView v-else-if="section === 'profiles'" />
-        </div>
+        </section>
       </div>
     </main>
 
@@ -308,12 +324,12 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   padding: 0 clamp(16px, 2vw, 32px);
 }
 
-/* Top brandbar Header (Version on left, Powered by monkey² on right) */
+/* Top brandbar Header */
 .brandbar {
   position: relative;
   z-index: 20;
   width: 100%;
-  padding: 12px 0 6px;
+  padding: 12px 0 8px;
   background: transparent;
 }
 
@@ -389,94 +405,129 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
     transform: translate(-50%, calc(-50% - 4px));
   }
 
-  &.tier-ink {
-    color: $ink;
-  }
-
-  &.tier-gray {
-    color: $gray;
-  }
-
-  &.tier-blue {
-    color: $blue;
-  }
+  &.tier-ink { color: $ink; }
+  &.tier-gray { color: $gray; }
+  &.tier-blue { color: $blue; }
 }
 
-.slogan-en {
-  font-family: $font;
-  font-weight: 700;
-}
+.slogan-en { font-family: $font; font-weight: 700; }
+.slogan-dot { opacity: 0.45; font-size: 0.9em; }
+.slogan-cn { font-family: $font; font-weight: 700; }
 
-.slogan-dot {
-  opacity: 0.45;
-  font-size: 0.9em;
-}
-
-.slogan-cn {
-  font-family: $font;
-  font-weight: 700;
-}
-
-/* Top Navigation Horizontal Tabs: 保持 70% 居中，6 个选项卡均分整行自适应 */
-.wb-nav {
+/* Stage Area: 左右分栏 */
+.wb-stage {
   position: relative;
-  z-index: 15;
-  width: 100%;
-  padding: 6px 0 10px;
-  background: transparent;
+  z-index: 10;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  padding-bottom: 74px; /* Space for centered footer */
 }
 
-.nav-shell {
-  width: 100%;
-  max-width: 1240px;
-  margin: 0 auto;
-}
-
-.tab-list {
+.stage-inner {
+  height: 100%;
   display: flex;
-  align-items: stretch;
-  justify-content: space-between;
-  width: 100%;
-  gap: 12px;
-  padding: 4px 0 8px;
-  border-bottom: 1px solid $gray-line;
+  gap: 16px;
 }
 
-.nav-tab-item {
+/* 左侧 6 卡片导航侧栏 */
+.wb-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 220px;
+  flex-shrink: 0;
+  height: 100%;
+  transition: width 0.24s $ease;
+
+  &.is-collapsed {
+    width: 64px;
+  }
+}
+
+.sidebar-head {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 0 8px 0;
+}
+
+.collapse-btn {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 6px;
+  border: 1px solid rgba(82, 82, 82, 0.14);
+  background: rgba(255, 255, 255, 0.7);
+  color: $gray;
+  cursor: pointer;
+  transition: all 0.2s $ease;
+
+  &:hover {
+    color: $blue;
+    border-color: $blue;
+    background: #ffffff;
+  }
+
+  svg {
+    width: 14px;
+    height: 14px;
+  }
+}
+
+.sidebar-cards {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}
+
+.side-card {
   flex: 1 1 0;
-  min-width: 0;
-  display: inline-flex;
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 8px;
-  padding: 8px 12px;
-  border-radius: 8px;
-  border: 1px solid rgba(82, 82, 82, 0.12);
-  /* 适度磨砂 24%，既看清内容也透出晶格 */
-  background: rgba(255, 255, 255, 0.24);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  gap: 12px;
+  padding: 0 16px;
+  border-radius: $radius;
+  border: 1px solid rgba(82, 82, 82, 0.16);
+  /* 适度磨砂，不透明度提升至 0.65，显质感 */
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   cursor: pointer;
   transition: all 0.22s $ease;
   outline: none;
-  white-space: nowrap;
+  text-align: start;
+  overflow: hidden;
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.88);
+    border-color: $blue-line;
+    transform: translateX(2px);
+  }
+
+  &.is-active {
+    background: rgba(255, 255, 255, 0.95);
+    border-color: $blue;
+    box-shadow: 0 6px 20px rgba(31, 78, 121, 0.12);
+  }
 }
 
-.nav-tab-item:hover {
-  background: rgba(255, 255, 255, 0.55);
-  border-color: $blue-line;
-  transform: translateY(-1px);
+.is-collapsed .side-card {
+  padding: 0;
+  justify-content: center;
 }
 
-.nav-tab-item.is-active {
-  background: rgba(255, 255, 255, 0.70);
-  border-color: $blue;
-  box-shadow: 0 4px 14px rgba(31, 78, 121, 0.10);
+.side-card__icon-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
 }
 
-.tab-item__icon {
-  width: 16px;
-  height: 16px;
+.side-card__icon {
+  width: 20px;
+  height: 20px;
   stroke: $blue;
   stroke-width: 1.8;
   fill: none;
@@ -484,53 +535,46 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   stroke-linejoin: round;
 }
 
-.tab-item__label {
-  font-size: 0.92rem;
+.side-card__meta {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.side-card__title {
+  font-size: 0.95rem;
   font-weight: 700;
   color: $ink;
+  white-space: nowrap;
 }
 
-.tab-item__en {
+.side-card__en {
   font-family: $mono;
-  font-size: 0.65rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  color: rgba(82, 82, 82, 0.5);
+  letter-spacing: 0.06em;
+  color: rgba(82, 82, 82, 0.55);
 }
 
-.nav-tab-item.is-active .tab-item__en {
+.side-card.is-active .side-card__en {
   color: $blue;
 }
 
-/* Stage Area: 30% 透明度透底 (rgba 0.30) */
-.wb-stage {
-  position: relative;
-  z-index: 10;
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow: hidden;
-  padding-bottom: 74px;
-}
-
-.stage-inner {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
+/* 右侧内容容器：适度提高不透明度至 0.72，阅读清晰，晶格隐约可见 */
 .paper-card {
   position: relative;
   flex: 1 1 auto;
-  min-height: 0;
+  min-width: 0;
+  height: 100%;
   overflow-y: auto;
-  /* 适度磨砂 22% (rgba 0.22)，保持阅读质感同时背景晶格通透可见 */
-  background: rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(82, 82, 82, 0.14);
+  background: rgba(255, 255, 255, 0.72);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(82, 82, 82, 0.16);
   border-radius: $radius;
-  box-shadow: 0 8px 32px rgba(31, 78, 121, 0.03);
-  padding: 16px 20px;
+  box-shadow: 0 8px 32px rgba(31, 78, 121, 0.04);
+  padding: 16px 22px;
 
   /* 穿透控制内嵌卡片透明度 */
   :deep(.provider-card),
@@ -538,10 +582,38 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   :deep(.job-card),
   :deep(.channel-card),
   :deep(.n-card) {
-    background: rgba(255, 255, 255, 0.35) !important;
+    background: rgba(255, 255, 255, 0.85) !important;
     backdrop-filter: blur(6px);
     -webkit-backdrop-filter: blur(6px);
     border-color: rgba(82, 82, 82, 0.14) !important;
+  }
+
+  /* 隐藏子视图内冗余的标题，保留纯操作按钮 */
+  :deep(.models-header-left),
+  :deep(.page-header .header-title) {
+    display: none !important;
+  }
+
+  :deep(.page-header) {
+    border-bottom: none !important;
+    min-height: 0 !important;
+    padding: 0 0 10px 0 !important;
+  }
+
+  /* 子选项卡固定置顶：粘性定位吸顶，背景透光且滚动绝对不移走 */
+  :deep(.models-content > .n-tabs > .n-tabs-nav),
+  :deep(.wb-settings > .n-tabs > .n-tabs-nav),
+  :deep(.jobs-view > .page-header),
+  :deep(.profiles-view > .page-header) {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 20 !important;
+    background: rgba(255, 255, 255, 0.94) !important;
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+    padding-top: 6px !important;
+    padding-bottom: 6px !important;
+    border-bottom: 1px solid $gray-line !important;
   }
 }
 
@@ -554,7 +626,7 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   padding-top: 12px;
 }
 
-/* Bottom Footer: 纯透明背景，宽度与上方 70% shell 严格一致 */
+/* Bottom Footer: 纯透明背景 */
 .site-foot {
   position: fixed;
   bottom: 0;
@@ -565,7 +637,7 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   justify-content: center;
   align-items: center;
   padding: 12px 0 16px;
-  background: transparent; /* 网站名那一行卡片纯透明 */
+  background: transparent;
   border-top: none;
   pointer-events: none;
 }
@@ -601,16 +673,8 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   align-items: baseline;
 }
 
-.wordmark .lbl-gray {
-  color: $gray;
-  font-weight: 700;
-}
-
-.wordmark .lbl-blue {
-  color: $blue;
-  font-weight: 700;
-}
-
+.wordmark .lbl-gray { color: $gray; font-weight: 700; }
+.wordmark .lbl-blue { color: $blue; font-weight: 700; }
 .wordmark .sep {
   display: inline-block;
   margin: 0 6px;

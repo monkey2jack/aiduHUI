@@ -40,15 +40,19 @@ onMounted(() => {
 @use '@/styles/variables' as *;
 
 .channels-view {
-  height: calc(100 * var(--vh));
+  height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+.page-header {
+  display: none !important;
 }
 
 .channels-content {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 0;
   position: relative;
 }
 </style>

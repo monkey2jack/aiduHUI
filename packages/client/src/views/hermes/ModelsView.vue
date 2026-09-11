@@ -131,7 +131,7 @@ async function handleRefreshModelCache() {
       <NSpin size="large" :description="t('models.refreshModelCacheLoading')" />
     </div>
 
-    <header class="page-header">
+    <header class="page-header models-page-header">
       <div class="models-header-left">
         <NButton
           class="models-sidebar-toggle"
@@ -151,7 +151,7 @@ async function handleRefreshModelCache() {
             </svg>
           </template>
         </NButton>
-        <h2 class="header-title">{{ t('models.title') }}</h2>
+        <h2 class="header-title models-main-title">{{ t('models.title') }}</h2>
       </div>
       <div v-if="activeTab === 'general'" class="header-actions">
         <NButton
@@ -217,27 +217,19 @@ async function handleRefreshModelCache() {
 }
 
 .models-header-left {
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: 8px;
+  display: none !important;
 }
 
-.model-cache-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 3000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: color-mix(in srgb, $bg-primary 78%, transparent);
-  backdrop-filter: blur(2px);
+.models-page-header {
+  min-height: 0 !important;
+  padding: 0 0 10px 0 !important;
+  border-bottom: none !important;
 }
 
 .models-content {
   flex: 1;
   overflow-y: auto;
-  padding: 20px;
+  padding: 0;
 }
 
 .header-actions {
