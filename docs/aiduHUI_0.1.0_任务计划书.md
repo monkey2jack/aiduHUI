@@ -25,7 +25,7 @@
 | 项目 | 中文名 | 定位 |
 |---|---|---|
 | aiduMEI | 爱嘟美 | 智能体通用智慧引擎（后端大脑） |
-| aiduPOP | 爱嘟泡 | Hermes 飞书流式插件（消息通道） |
+| aiduPOP | 爱嘟泡波浪 | Hermes 飞书流式插件（消息通道） |
 | aiduPARK | 爱嘟乐园 | HERMES AGENT 中文社区站（门户） |
 | **aiduHUI** | **爱嘟心视界** | **Hermes 操作台（人机界面）** |
 

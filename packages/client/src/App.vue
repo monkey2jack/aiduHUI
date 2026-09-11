@@ -129,18 +129,8 @@ const usesEkkoConfigSidebar = computed(
 const usesCodingAgentConfigSidebar = computed(
   () => route.meta?.codingAgentConfig === true,
 );
-// Views with `meta.ownSidebar` (the aiduHUI workbench) bring their own
-// navigation rail — never stack the global sidebar on top of them.
-const usesOwnSidebar = computed(() => route.meta?.ownSidebar === true);
 const showAppSidebar = computed(
-  () =>
-    !isLoginPage.value &&
-    !isStandaloneChatPage.value &&
-    !usesPageSidebar.value &&
-    !usesHermesConfigSidebar.value &&
-    !usesEkkoConfigSidebar.value &&
-    !usesCodingAgentConfigSidebar.value &&
-    !usesOwnSidebar.value,
+  () => false,
 );
 const showMobileMenuButton = computed(
   () =>

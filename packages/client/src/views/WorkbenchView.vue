@@ -249,7 +249,7 @@ onUnmounted(() => {
             <button
               type="button"
               class="logout-btn"
-              :title="t('login.logout') || '退出登录'"
+              title="退出/Log-Out"
               @click="handleLogout"
             >
               <svg class="logout-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -257,7 +257,7 @@ onUnmounted(() => {
                 <polyline points="16 17 21 12 16 7" />
                 <line x1="21" y1="12" x2="9" y2="12" />
               </svg>
-              <span v-if="!sidebarCollapsed" class="logout-text">{{ t('login.logout') || '退出登录' }}</span>
+              <span v-if="!sidebarCollapsed" class="logout-text">退出/Log-Out</span>
             </button>
           </div>
         </aside>
