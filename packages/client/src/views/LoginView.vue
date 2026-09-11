@@ -390,13 +390,13 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   flex-direction: column;
   align-items: center;
   padding: 32px 36px 36px;
-  /* 10% 磨砂超高透，显露背景三角晶格 */
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(82, 82, 82, 0.14);
+  /* 适度磨砂 24%，层次清晰且透出晶格底纹 */
+  background: rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(82, 82, 82, 0.16);
   border-radius: $radius;
-  box-shadow: 0 8px 32px rgba(31, 78, 121, 0.03);
+  box-shadow: 0 8px 32px rgba(31, 78, 121, 0.04);
 }
 
 .login-brand-avatar {

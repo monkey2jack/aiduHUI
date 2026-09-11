@@ -451,11 +451,11 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   gap: 8px;
   padding: 8px 12px;
   border-radius: 8px;
-  border: 1px solid rgba(82, 82, 82, 0.10);
-  /* 超高透 12% 磨砂玻璃 */
-  background: rgba(255, 255, 255, 0.12);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid rgba(82, 82, 82, 0.12);
+  /* 适度磨砂 24%，既看清内容也透出晶格 */
+  background: rgba(255, 255, 255, 0.24);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
   transition: all 0.22s $ease;
   outline: none;
@@ -463,15 +463,15 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
 }
 
 .nav-tab-item:hover {
-  background: rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.55);
   border-color: $blue-line;
   transform: translateY(-1px);
 }
 
 .nav-tab-item.is-active {
-  background: rgba(255, 255, 255, 0.50);
+  background: rgba(255, 255, 255, 0.70);
   border-color: $blue;
-  box-shadow: 0 4px 14px rgba(31, 78, 121, 0.08);
+  box-shadow: 0 4px 14px rgba(31, 78, 121, 0.10);
 }
 
 .tab-item__icon {
@@ -523,25 +523,25 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   flex: 1 1 auto;
   min-height: 0;
   overflow-y: auto;
-  /* 超透 10% 磨砂玻璃 (rgba 0.10)，晶格动态与粒子完全透出 */
-  background: rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
-  border: 1px solid rgba(82, 82, 82, 0.12);
+  /* 适度磨砂 22% (rgba 0.22)，保持阅读质感同时背景晶格通透可见 */
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(82, 82, 82, 0.14);
   border-radius: $radius;
-  box-shadow: 0 8px 32px rgba(31, 78, 121, 0.02);
+  box-shadow: 0 8px 32px rgba(31, 78, 121, 0.03);
   padding: 16px 20px;
 
-  /* 穿透控制内嵌卡片透明度，确保所有子模块卡片也高透 */
+  /* 穿透控制内嵌卡片透明度 */
   :deep(.provider-card),
   :deep(.profile-card),
   :deep(.job-card),
   :deep(.channel-card),
   :deep(.n-card) {
-    background: rgba(255, 255, 255, 0.20) !important;
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    border-color: rgba(82, 82, 82, 0.12) !important;
+    background: rgba(255, 255, 255, 0.35) !important;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    border-color: rgba(82, 82, 82, 0.14) !important;
   }
 }
 
