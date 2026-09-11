@@ -141,6 +141,11 @@ function pickRandomPosition() {
 }
 
 onMounted(() => {
+  // 手机屏幕初始化时默认折叠卡片栏
+  if (typeof window !== 'undefined' && window.innerWidth <= 768) {
+    sidebarCollapsed.value = true
+  }
+
   if (workbenchRef.value) {
     mountLatticeBG(workbenchRef.value)
   }
@@ -471,20 +476,21 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
 .boundary-toggle-btn {
   position: absolute;
   top: 50%;
-  right: -8px;
+  /* 严格居中于 16px 空隙中间 (16px gap，按钮宽 14px，偏移 -15px 刚好居中且零压边) */
+  right: -15px;
   transform: translateY(-50%);
   z-index: 50;
-  width: 16px;
-  height: 32px;
+  width: 14px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  border: 1px solid rgba(82, 82, 82, 0.20);
-  background: rgba(255, 255, 255, 0.85);
+  border-radius: 6px;
+  border: 1px solid rgba(82, 82, 82, 0.18);
+  background: rgba(255, 255, 255, 0.90);
   backdrop-filter: blur(6px);
   -webkit-backdrop-filter: blur(6px);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 4px rgba(31, 78, 121, 0.08);
   color: $gray-soft;
   cursor: pointer;
   padding: 0;
@@ -494,12 +500,12 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
     color: $blue;
     border-color: $blue;
     background: #ffffff;
-    box-shadow: 0 2px 8px rgba(31, 78, 121, 0.18);
+    box-shadow: 0 2px 8px rgba(31, 78, 121, 0.20);
   }
 
   svg {
-    width: 10px;
-    height: 10px;
+    width: 9px;
+    height: 9px;
   }
 }
 
@@ -757,35 +763,43 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   font-size: 28px;
 }
 
-/* 手机端响应式适配 (Mobile & Tablet) —— 保持侧栏折叠体验 */
+/* 手机端响应式适配 (Mobile & Tablet) —— 折叠时全收起，仅保留切换按钮 */
 @media (max-width: 768px) {
   .shell {
-    padding: 0 8px;
+    padding: 0 6px;
   }
 
   .stage-inner {
     flex-direction: row;
-    gap: 8px;
+    gap: 12px;
   }
 
   .wb-sidebar {
-    width: 156px !important;
+    width: 160px !important;
+
+    /* 手机端折叠时完全收起，宽度为0 */
     &.is-collapsed {
-      width: 48px !important;
+      width: 0px !important;
+      overflow: visible;
+
+      .sidebar-cards,
+      .sidebar-foot {
+        display: none !important;
+      }
     }
   }
 
   .boundary-toggle-btn {
     display: flex !important;
-    right: -7px;
+    right: -14px;
     width: 14px;
-    height: 28px;
+    height: 36px;
     border-radius: 6px;
   }
 
   .side-card {
-    padding: 0 8px;
-    gap: 6px;
+    padding: 0 10px;
+    gap: 8px;
   }
 
   .side-card__icon {
@@ -794,7 +808,7 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   }
 
   .side-card__title {
-    font-size: 0.82rem;
+    font-size: 0.84rem;
   }
 
   .side-card__en {
@@ -802,11 +816,11 @@ $mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, "PingFang SC", Consolas, 
   }
 
   .logout-btn {
-    padding: 6px 8px;
+    padding: 8px 10px;
   }
 
   .logout-text {
-    font-size: 0.75rem;
+    font-size: 0.76rem;
   }
 
   .paper-card {
