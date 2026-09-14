@@ -181,7 +181,7 @@ function applyModelVisibility(groups: AvailableGroup[], visibility: ModelVisibil
         models: filterModelsForProvider(group.provider, availableModels, visibility),
       }
     })
-    .filter(group => group.models.length > 0 || group.provider === OPENCODE_FREE_PROVIDER)
+    .filter(group => group.models.length > 0)
 }
 
 function resolveVisibleDefault(defaultModel: string, defaultProvider: string, groups: AvailableGroup[]) {
@@ -465,14 +465,7 @@ async function buildAvailableForProfile(
 
   for (const [providerKey, envMapping] of Object.entries(PROVIDER_ENV_MAP)) {
     if (providerKey === OPENCODE_FREE_PROVIDER) {
-      const freeStatus = getOpenCodeFreeStatus()
-      const models = freeStatus === 'unsupported' ? [] : resolveProviderCatalogModels(
-        modelCatalogCache, providerKey, OPENCODE_FREE_BASE_URL, [],
-      ).filter(isOpenCodeFreeModel)
-      addGroup(providerKey, 'OpenCode Free', OPENCODE_FREE_BASE_URL, models, '', true)
-      const group = groups.find(item => item.provider === providerKey)
-      if (group) group.catalog_status = freeStatus
-      continue
+      continue // disabled: opencode-free bypassed by default
     }
     const oauthAuthorized = providerSupportsStoredOAuth(providerKey) ? isOAuthAuthorized(providerKey) : false
     if (envMapping.api_key_env && !envHasValue(envMapping.api_key_env) && !oauthAuthorized) continue

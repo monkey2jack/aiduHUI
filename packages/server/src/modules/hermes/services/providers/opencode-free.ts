@@ -45,34 +45,7 @@ async function probeSupport(): Promise<boolean> {
   return stdout.trim().split(/\r?\n/).at(-1) === 'supported'
 }
 
-/** No caller awaits startup network IO. Retries are bounded and single-flight. */
+/** Disabled - OpenCode Free is bypassed by default */
 export function initializeOpenCodeFreeInBackground(): void {
-  if (inflight || retryTimer) return
-  inflight = Promise.resolve().then(async () => {
-    const [support, catalog] = await Promise.allSettled([probeSupport(), fetchOpenCodeFreeModels()])
-    if (catalog.status === 'fulfilled' && catalog.value.length) {
-      await writeProviderModelCatalogEntry({
-        provider: OPENCODE_FREE_PROVIDER,
-        label: 'OpenCode Free',
-        base_url: OPENCODE_FREE_BASE_URL,
-        models: catalog.value,
-        source: 'live',
-      })
-    }
-    status = support.status === 'fulfilled' && !support.value
-      ? 'unsupported'
-      : support.status === 'fulfilled' && catalog.status === 'fulfilled' && catalog.value.length
-        ? 'ready'
-        : 'error'
-  }).catch(error => {
-    status = 'error'
-    logger.warn(error, '[opencode-free] background initialization failed')
-  }).finally(() => {
-    inflight = undefined
-    retryTimer = setTimeout(() => {
-      retryTimer = undefined
-      initializeOpenCodeFreeInBackground()
-    }, status === 'ready' ? REFRESH_MS : RETRY_MS)
-    retryTimer.unref()
-  })
+  // noop
 }

@@ -37,18 +37,18 @@ const deleting = ref(false)
 const refreshingModels = ref(false)
 const restoringModels = ref(false)
 const destructiveActionLabel = computed(() => {
-  if (isConfigBackedProvider.value) return t('common.delete')
+  if (isConfigBackedProvider.value || isOpenCodeFree.value) return t('common.delete')
   if (isCopilot.value) return t('models.disableProvider')
   return t('models.clearProviderCredentials')
 })
 const destructiveActionTitle = computed(() => {
-  if (isConfigBackedProvider.value) return t('models.deleteProvider')
+  if (isConfigBackedProvider.value || isOpenCodeFree.value) return t('models.deleteProvider')
   if (isCopilot.value) return t('models.disableProvider')
   return t('models.clearProviderCredentials')
 })
 
 function destructiveConfirmContent(copilotMsg: string) {
-  if (isConfigBackedProvider.value) return t('models.deleteConfirm', { name: displayName.value })
+  if (isConfigBackedProvider.value || isOpenCodeFree.value) return t('models.deleteConfirm', { name: displayName.value })
   if (isCopilot.value) {
     const base = t('models.disableProviderConfirm', { name: displayName.value })
     return copilotMsg ? `${base}\n\n${copilotMsg}` : base
@@ -392,7 +392,7 @@ async function handleRestoreModels() {
         {{ t('models.restoreModels') }}
       </NButton>
       <NButton v-if="canEditProvider" size="tiny" quaternary @click="showEditorModal = true">{{ t('common.edit') }}</NButton>
-      <NButton v-if="!isOpenCodeFree" size="tiny" quaternary type="error" :loading="deleting" @click="handleDelete">{{ destructiveActionLabel }}</NButton>
+      <NButton size="tiny" quaternary type="error" :loading="deleting" @click="handleDelete">{{ destructiveActionLabel }}</NButton>
     </div>
 
     <ProviderEditorModal

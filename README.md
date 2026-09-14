@@ -61,7 +61,7 @@ aiduHUI 爱嘟心视界
 │   ├── 定时任务 (Jobs) ── Cron 定时计划、周期作业与自检巡检调度
 │   ├── 外部频道 (Channels) ── 飞书、Telegram、Discord 等消息入口配置
 │   └── 技能记忆 (Memory) ── 技能包装配、长期沉淀与行为指令基座
-└── 4. 配置档案 (PROFILES) ── 多 Profile 隔离切换与运行时网关管理
+└── 4. 配置档案 (PROFILES) ── 多 Profile 隔离切换、运行时网关管理与 Hermes Agent 实时版本感知
 ```
 
 ---

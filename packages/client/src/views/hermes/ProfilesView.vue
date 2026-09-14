@@ -51,7 +51,10 @@ function handleImported() {
 <template>
   <div class="profiles-view">
     <header class="page-header">
-      <h2 class="header-title">{{ t('profiles.title') }}</h2>
+      <div style="display: flex; align-items: center; gap: 12px">
+        <h2 class="header-title">{{ t('profiles.title') }}</h2>
+        <span class="hermes-agent-version-tag" style="display: inline-flex !important; visibility: visible !important; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; padding: 4px 12px; border-radius: 14px; background: rgba(37, 99, 235, 0.08); color: #1d4ed8; border: 1px solid rgba(37, 99, 235, 0.25); line-height: 1.5; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);">Hermes Agent v0.21.2</span>
+      </div>
       <div class="header-actions">
         <NButton
           size="small"
