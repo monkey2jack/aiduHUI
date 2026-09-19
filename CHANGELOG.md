@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [Unreleased]
+
+### Fixed
+- **Bridge Worker Socket Path Fallback**: Fixed potential daemon exit/bind failures by calculating Unix domain socket path lengths against `_AF_UNIX_MAX_PATH` (104 on Darwin, 108 on Linux) and automatically falling back to localized TCP endpoints when temporary workspace directories exceed platform limits (upstream #3048).
+- **Hermes Agent 0.21+ Session Key Compatibility**: Added multi-tier import fallback for `set_current_session_key` / `reset_current_session_key` across `tools.approval_context` and legacy `tools.approval` paths (upstream #3018).
+- **Skill Frontmatter Parsing Robustness**: Hardened scalar parsing regex to prevent indented multiline descriptions from overflowing and consuming subsequent keys (upstream #3083).
+
+---
+
 ## [0.1.1] - 2026-09-14
 
 ### Added
