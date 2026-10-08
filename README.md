@@ -2,7 +2,7 @@
   <img src="packages/client/public/assets/aiduhui-banner.png" alt="aiduHUI v0.1" width="100%">
 </p>
 
-# aiduHUI⚕爱嘟心视界——HERMES AGENT 专精智控台
+# aiduHUI☤爱嘟心视界——HERMES AGENT 专精智控台
 
 > **aidu Hermes User Interface**
 >

@@ -310,7 +310,7 @@ onUnmounted(() => {
             <source srcset="/assets/img/monkey.webp" type="image/webp" />
             <img class="brand-logo" src="/assets/img/monkey.png" alt="aiduHUI" width="44" height="44" draggable="false" />
           </picture>
-          <span class="wordmark"><span class="lbl-gray">aidu</span><b class="lbl-blue">HUI</b><i class="sep">⚕</i><span class="lbl-gray">爱嘟</span><b class="lbl-blue">心视界</b></span>
+          <span class="wordmark"><span class="lbl-gray">aidu</span><b class="lbl-blue">HUI</b><i class="sep">☤</i><span class="lbl-gray">爱嘟</span><b class="lbl-blue">心视界</b></span>
         </div>
       </div>
     </footer>
