@@ -2,7 +2,7 @@
   <img src="packages/client/public/assets/aiduhui-banner.png" alt="aiduHUI v0.1" width="100%">
 </p>
 
-# aiduHUI☤爱嘟心视界——HERMES AGENT 专精智控台
+# <b style="color:#000000">ai</b><b style="color:#525252">du</b><b style="color:#1F4E79">HUI</b>·<b style="color:#000000">爱</b><b style="color:#525252">嘟</b><b style="color:#1F4E79">心视界</b>——HERMES AGENT 专精智控台
 
 > **aidu Hermes User Interface**
 >
