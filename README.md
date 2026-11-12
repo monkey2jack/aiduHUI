@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="packages/client/public/assets/aiduhui-banner.png" alt="aiduHUI v0.1" width="100%">
+  <img src="https://raw.githubusercontent.com/monkey2jack/monkey2jack/main/assets/aidu-human-connection-20261113.png" alt="aidu 人机连接" width="100%">
 </p>
 
 # <b style="color:#000000">ai</b><b style="color:#525252">du</b><b style="color:#1F4E79">HUI</b>·<b style="color:#000000">爱</b><b style="color:#525252">嘟</b><b style="color:#1F4E79">心视界</b>——HERMES AGENT 专精智控台
